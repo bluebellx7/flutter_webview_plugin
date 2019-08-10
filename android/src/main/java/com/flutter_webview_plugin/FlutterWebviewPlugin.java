@@ -102,7 +102,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
     public void onMethodCall(MethodCall call, MethodChannel.Result result) {
         switch (call.method) {
             case "initX5":
-                initX5();
+                initX5(context);
             case "canUseTbsPlayer":
                 result.success(TbsVideo.canUseTbsPlayer(context));
             case "openVideo":
