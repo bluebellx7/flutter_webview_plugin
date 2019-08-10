@@ -33,6 +33,20 @@ In order for plugin to work correctly, you need to add new key to `ios/Runner/In
 
 ### How it works
 
+#### Open Video
+```dart
+_openVideo async {
+      var canUseTbsPlayer =
+            await flutterWebViewPlugin.canUseTbsPlayer();
+      if (canUseTbsPlayer) {
+          await flutterWebViewPlugin.openVideo(
+                      'http://iqiyi.qq-zuidazy.com/20181127/1613_0be59993/index.m3u8');
+      } else {
+         print('不支持播放视频');
+      }
+  }
+```              
+
 #### Launch WebView Fullscreen with Flutter navigation
 
 ```dart
