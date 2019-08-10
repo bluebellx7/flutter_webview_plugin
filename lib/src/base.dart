@@ -22,7 +22,7 @@ class FlutterWebviewPlugin {
 
   static FlutterWebviewPlugin _instance;
 
-  final _channel = const MethodChannel(_kChannel);
+  static const  _channel = const MethodChannel(_kChannel);
 
   final _onBack = StreamController<Null>.broadcast();
   final _onDestroy = StreamController<Null>.broadcast();
@@ -92,7 +92,12 @@ class FlutterWebviewPlugin {
   Stream<WebViewHttpError> get onHttpError => _onHttpError.stream;
 
 
-  Future<bool> canUseTbsPlayer() async {
+  static Future<Null> initX5() async {
+    await _channel.invokeMethod("initX5");
+  }
+
+
+  static Future<bool> canUseTbsPlayer() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canUseTbsPlayer");
       return res;
@@ -101,7 +106,7 @@ class FlutterWebviewPlugin {
     }
   }
 
-  Future<Null> openVideo(String url, {bool fullScreen=true}) async {
+  static Future<Null> openVideo(String url, {bool fullScreen=true}) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final Map<String, dynamic> args = <String, dynamic>{
         'fullScreen': fullScreen,
