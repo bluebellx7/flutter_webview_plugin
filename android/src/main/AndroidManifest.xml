@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.GET_TASKS"/>
     
     <application android:usesCleartextTraffic="true">
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <!-- <uses-library android:name="org.apache.http.legacy" android:required="false" /> -->
             <!--     在AndroidManifest.xml中增加内核首次加载时优化Service声明；    该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。  -->
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
