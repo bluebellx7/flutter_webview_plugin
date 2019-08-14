@@ -13,12 +13,23 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.content.Intent;
+import java.net.URISyntaxException;
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.widget.Toast;
+import java.util.List;
+
 /**
  * Created by lejard_h on 20/12/2017.
  */
 
 public class BrowserClient extends WebViewClient {
     private Pattern invalidUrlPattern = null;
+    Context context;
+    Activity activity;
 
     public BrowserClient() {
         this(null);
@@ -29,6 +40,13 @@ public class BrowserClient extends WebViewClient {
         if (invalidUrlRegex != null) {
             invalidUrlPattern = Pattern.compile(invalidUrlRegex);
         }
+    }
+
+    
+    public  BrowserClient(final Activity activity, final Context context) {
+        this(null);
+        this.activity=activity;
+        this.context=context;
     }
 
     public void updateInvalidUrlRegex(String invalidUrlRegex) {
@@ -61,6 +79,7 @@ public class BrowserClient extends WebViewClient {
 
     }
 
+    // 注释代码
     // @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     // @Override
     // public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -80,15 +99,52 @@ public class BrowserClient extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         // returning true causes the current WebView to abort loading the URL,
         // while returning false causes the WebView to continue loading the URL as usual.
-        boolean isInvalid = checkInvalidUrl(url);
-        Map<String, Object> data = new HashMap<>();
-        data.put("url", url);
-        data.put("type", isInvalid ? "abortLoad" : "shouldStart");
 
-        FlutterWebviewPlugin.channel.invokeMethod("onState", data);
-        return isInvalid;
+        
+        if( url.startsWith("http") || url.startsWith("https") || url.startsWith("ftp") ) {
+            // 返回true会终止url请求，返回false继续加载
+            boolean isInvalid = checkInvalidUrl(url);
+            Map<String, Object> data = new HashMap<>();
+            data.put("url", url);
+            data.put("type", isInvalid ? "abortLoad" : "shouldStart");
+
+            FlutterWebviewPlugin.channel.invokeMethod("onState", data);
+
+            return isInvalid;
+        }
+        try{
+            // URL Scheme 比如 taobao://... 自动跳转到淘宝app
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if(isAvailable(intent)){
+                // System.out.println("url=="+url);
+                activity.startActivity( intent );
+            }else{
+                Toast t = Toast.makeText(context,"没有安装相应的第三方App", Toast.LENGTH_LONG);
+                t.show();
+            }
+        }catch(Exception e){}
+        return true;
+        // // 注释代码
+        // boolean isInvalid = checkInvalidUrl(url);
+        // Map<String, Object> data = new HashMap<>();
+        // data.put("url", url);
+        // data.put("type", isInvalid ? "abortLoad" : "shouldStart");
+        
+        // FlutterWebviewPlugin.channel.invokeMethod("onState", data);
+        // return isInvalid;
+    }
+    // 新增代码
+    public boolean isAvailable(Intent intent) {
+        PackageManager packageManager = context.getPackageManager();
+        List list = packageManager.queryIntentActivities(intent,
+        PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
+
+    
+
+    // 注释代码
     // @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     // @Override
     // public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
