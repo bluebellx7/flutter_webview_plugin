@@ -106,7 +106,7 @@ class FlutterWebviewPlugin {
     }
   }
 
-  static Future<Null> openVideo(String url, {bool fullScreen=true}) async {
+  static Future<Null> openVideo(String url, {int fullScreen=103}) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final Map<String, dynamic> args = <String, dynamic>{
         'fullScreen': fullScreen,
