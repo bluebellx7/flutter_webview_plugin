@@ -62,6 +62,12 @@ class MyApp extends StatelessWidget {
                       flutterWebViewPlugin.reload();
                     },
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      flutterWebViewPlugin.close();
+                    },
+                  ),
                 ],
               ),
             ),

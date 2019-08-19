@@ -421,6 +421,8 @@ class WebviewManager {
         if (webView != null) {
             ViewGroup vg = (ViewGroup) (webView.getParent());
             vg.removeView(webView);
+            // 销毁webview
+            webView.destroy();
         }
         webView = null;
         if (result != null) {

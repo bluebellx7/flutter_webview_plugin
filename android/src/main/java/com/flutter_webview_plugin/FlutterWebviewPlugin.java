@@ -109,6 +109,9 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
                 String url = call.argument("url");
                 String screenMode = call.argument("fullScreen");//?103:104;
                 Bundle bundle = new Bundle();
+                if(screenMode==null){
+                    screenMode=103;
+                }
                 bundle.putInt("screenMode", Integer.parseInt(screenMode));
                 TbsVideo.openVideo(context, url, bundle);
                 result.success(null);
