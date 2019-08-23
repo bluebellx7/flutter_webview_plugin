@@ -118,6 +118,25 @@ class FlutterWebviewPlugin {
     }
   }
 
+  
+  static Future<bool> canGoBack() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      bool res = await _channel.invokeMethod("canGoBack");
+      return res;
+    } else {
+      return true;
+    }
+  }
+  
+  static Future<bool> canGoForward() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      bool res = await _channel.invokeMethod("canGoForward");
+      return res;
+    } else {
+      return true;
+    }
+  }
+
 
   /// Start the Webview with [url]
   /// - [headers] specify additional HTTP headers
