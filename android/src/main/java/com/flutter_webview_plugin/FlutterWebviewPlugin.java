@@ -272,7 +272,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         if (webViewManager != null&&webViewManager.canGoBack()) {
             result.success(true);
         }
-        result.success(null);
+        result.success(false);
     }
 
     /**
@@ -282,7 +282,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         if (webViewManager != null&&webViewManager.canGoBack()) {
             result.success(true);
         }
-        result.success(null);
+        result.success(false);
     }
 
     /**
