@@ -119,7 +119,7 @@ class FlutterWebviewPlugin {
   }
 
   
-  static Future<bool> canGoBack() async {
+  Future<bool> canGoBack() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canGoBack");
       return res;
@@ -128,7 +128,7 @@ class FlutterWebviewPlugin {
     }
   }
   
-  static Future<bool> canGoForward() async {
+ Future<bool> canGoForward() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canGoForward");
       return res;
