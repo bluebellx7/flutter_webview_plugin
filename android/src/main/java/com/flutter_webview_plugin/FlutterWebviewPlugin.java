@@ -107,15 +107,17 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
                 result.success(TbsVideo.canUseTbsPlayer(context));
             case "openVideo":
                 String url = call.argument("url");
-                if(url!=null&&url!=''){
-                    String screenMode = call.argument("fullScreen");//?103:104;
-                    Bundle bundle = new Bundle();
-                    if(screenMode==null){
-                        screenMode="103";
-                    }
-                    bundle.putInt("screenMode", Integer.parseInt(screenMode));
-                    TbsVideo.openVideo(context, url, bundle);
+                if(url==null){
+                    result.success(null);
                 }
+
+                String screenMode = call.argument("fullScreen");//?103:104;
+                Bundle bundle = new Bundle();
+                if(screenMode==null){
+                    screenMode="103";
+                }
+                bundle.putInt("screenMode", Integer.parseInt(screenMode));
+                TbsVideo.openVideo(context, url, bundle);
                 result.success(null);
             case "launch":
                 openUrl(call, result);
