@@ -97,7 +97,7 @@ class FlutterWebviewPlugin {
   }
 
 
-  static Future<bool> canUseTbsPlayer() async {
+  Future<bool> canUseTbsPlayer() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canUseTbsPlayer");
       return res;
@@ -106,7 +106,7 @@ class FlutterWebviewPlugin {
     }
   }
 
-  static Future<Null> openVideo(String url, {int fullScreen=103}) async {
+  Future<Null> openVideo(String url, {int fullScreen=103}) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final Map<String, dynamic> args = <String, dynamic>{
         'fullScreen': fullScreen.toString(),
