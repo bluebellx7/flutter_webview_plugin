@@ -44,7 +44,7 @@
             tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/x5filepaths" />
         </provider>
     </application>
 </manifest>
