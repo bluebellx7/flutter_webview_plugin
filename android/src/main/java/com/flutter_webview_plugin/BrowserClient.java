@@ -140,7 +140,7 @@ public class BrowserClient extends WebViewClient {
                             activity.startActivity( intent );
                         }
                     };
-                    ad1.setPositiveButton("确定",listener1);
+                    ad1.setPositiveButton(" 确 定 ",listener1);
                     DialogInterface.OnClickListener listener2 = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface diyalog, int which) {
@@ -148,7 +148,7 @@ public class BrowserClient extends WebViewClient {
                             t.show();
                         }
                     };
-                    ad1.setNegativeButton("取消",listener2);
+                    ad1.setNegativeButton(" 取 消 ",listener2);
                     ad1.show();
                 }
             }else{
