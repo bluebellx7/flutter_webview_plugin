@@ -133,7 +133,7 @@ public class BrowserClient extends WebViewClient {
                 }else{
                     AlertDialog.Builder ad1 = new AlertDialog.Builder(activity);
                     ad1.setTitle("提示");
-                    ad1.setMessage("确定跳转至第三方APP吗?");
+                    ad1.setMessage("确定跳转至第三方APP("+_scheme+")吗?");
                     DialogInterface.OnClickListener listener1 = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
