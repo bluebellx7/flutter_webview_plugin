@@ -22,6 +22,11 @@ import android.content.pm.PackageManager;
 import android.widget.Toast;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import java.util.List;
+import android.util.Log;
+
 /**
  * Created by lejard_h on 20/12/2017.
  */
@@ -95,12 +100,13 @@ public class BrowserClient extends WebViewClient {
     //     return isInvalid;
     // }
 
+    Intent intent;
+
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         // returning true causes the current WebView to abort loading the URL,
         // while returning false causes the WebView to continue loading the URL as usual.
 
-        
         if( url.startsWith("http") || url.startsWith("https") || url.startsWith("ftp") ) {
             // 返回true会终止url请求，返回false继续加载
             boolean isInvalid = checkInvalidUrl(url);
@@ -114,15 +120,44 @@ public class BrowserClient extends WebViewClient {
         }
         try{
             // URL Scheme 比如 taobao://... 自动跳转到淘宝app
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+             Log.d("-------------------------url",url);
             if(isAvailable(intent)){
-                // System.out.println("url=="+url);
-                activity.startActivity( intent );
+                String _scheme=url.substring(0, url.indexOf("://"));
+                Log.d("-------------------------getScheme",_scheme);
+                // 如果允许自动跳转第三方app
+                if(FlutterWebviewPlugin.allowSchemes!=null
+                &&FlutterWebviewPlugin.allowSchemes.size()>0
+                &&FlutterWebviewPlugin.allowSchemes.contains(_scheme)){
+                    activity.startActivity( intent );
+                }else{
+                    AlertDialog.Builder ad1 = new AlertDialog.Builder(activity);
+                    ad1.setTitle("提示");
+                    ad1.setMessage("确定跳转至第三方APP吗?");
+                    DialogInterface.OnClickListener listener1 = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            activity.startActivity( intent );
+                        }
+                    };
+                    ad1.setPositiveButton("确定",listener1);
+                    DialogInterface.OnClickListener listener2 = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface diyalog, int which) {
+                            Toast t = Toast.makeText(context,"取消跳转！", Toast.LENGTH_LONG);
+                            t.show();
+                        }
+                    };
+                    ad1.setNegativeButton("取消",listener2);
+                    ad1.show();
+                }
             }else{
-                Toast t = Toast.makeText(context,"没有安装相应的第三方App", Toast.LENGTH_LONG);
+                Toast t = Toast.makeText(context,"没有安装相应的第三方App！", Toast.LENGTH_LONG);
                 t.show();
             }
-        }catch(Exception e){}
+        }catch(Exception e){
+            Log.d("-------------------------Exception",e.getMessage());
+        }
         return true;
         // // 注释代码
         // boolean isInvalid = checkInvalidUrl(url);

@@ -26,6 +26,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.PluginRegistry;
+import java.util.List;
 
 /**
  * FlutterWebviewPlugin
@@ -167,7 +168,12 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         }
     }
 
+    // 用于保存能够自动跳转到第三方app的Scheme
+    public static List<String> allowSchemes = null;
     private void openUrl(MethodCall call, MethodChannel.Result result) {
+        allowSchemes = call.argument("allowSchemes");
+
+
         boolean hidden = call.argument("hidden");
         String url = call.argument("url");
         String userAgent = call.argument("userAgent");
@@ -185,6 +191,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         String invalidUrlRegex = call.argument("invalidUrlRegex");
         boolean geolocationEnabled = call.argument("geolocationEnabled");
         boolean debuggingEnabled = call.argument("debuggingEnabled");
+        
 
         if (webViewManager == null || webViewManager.closed == true) {
             webViewManager = new WebviewManager(activity, context);
@@ -193,6 +200,8 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         FrameLayout.LayoutParams params = buildLayoutParams(call);
 
         activity.addContentView(webViewManager.webView, params);
+
+
 
         webViewManager.openUrl(withJavascript,
                 clearCache,

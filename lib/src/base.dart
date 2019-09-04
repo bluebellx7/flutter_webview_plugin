@@ -179,8 +179,10 @@ class FlutterWebviewPlugin {
     String invalidUrlRegex,
     bool geolocationEnabled,
     bool debuggingEnabled,
+    List<String> allowSchemes
   }) async {
     final args = <String, dynamic>{
+      'allowSchemes':allowSchemes,
       'url': url,
       'withJavascript': withJavascript ?? true,
       'clearCache': clearCache ?? false,
