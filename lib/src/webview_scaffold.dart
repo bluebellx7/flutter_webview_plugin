@@ -157,6 +157,7 @@ class _WebviewScaffoldState extends State<WebviewScaffold> {
               invalidUrlRegex: widget.invalidUrlRegex,
               geolocationEnabled: widget.geolocationEnabled,
               debuggingEnabled: widget.debuggingEnabled,
+              allowSchemes:widget.allowSchemes,
             );
           } else {
             if (_rect != value) {
