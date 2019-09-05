@@ -9,7 +9,7 @@ const kAndroidUserAgent =
 
 String selectedUrl = 'http://tophub.today';
 
-void main(){
+void main() {
   FlutterWebviewPlugin.initX5();
   return runApp(MyApp());
 }
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
               title: const Text('Widget WebView'),
             ),
             // 新增Scheme限制，如果没有加入这个list，则会提示用户是否跳转，否则自动跳转
-            allowSchemes:const ['zhihu'],
+            allowSchemes: const ['zhihu'],
             withZoom: true,
             withLocalStorage: true,
             hidden: true,
