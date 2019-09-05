@@ -47,11 +47,10 @@ public class BrowserClient extends WebViewClient {
         }
     }
 
-    
-    public  BrowserClient(final Activity activity, final Context context) {
+    public BrowserClient(final Activity activity, final Context context) {
         this(null);
-        this.activity=activity;
-        this.context=context;
+        this.activity = activity;
+        this.context = context;
     }
 
     public void updateInvalidUrlRegex(String invalidUrlRegex) {
@@ -87,17 +86,19 @@ public class BrowserClient extends WebViewClient {
     // 注释代码
     // @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     // @Override
-    // public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-    //     // returning true causes the current WebView to abort loading the URL,
-    //     // while returning false causes the WebView to continue loading the URL as usual.
-    //     String url = request.getUrl().toString();
-    //     boolean isInvalid = checkInvalidUrl(url);
-    //     Map<String, Object> data = new HashMap<>();
-    //     data.put("url", url);
-    //     data.put("type", isInvalid ? "abortLoad" : "shouldStart");
+    // public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest
+    // request) {
+    // // returning true causes the current WebView to abort loading the URL,
+    // // while returning false causes the WebView to continue loading the URL as
+    // usual.
+    // String url = request.getUrl().toString();
+    // boolean isInvalid = checkInvalidUrl(url);
+    // Map<String, Object> data = new HashMap<>();
+    // data.put("url", url);
+    // data.put("type", isInvalid ? "abortLoad" : "shouldStart");
 
-    //     FlutterWebviewPlugin.channel.invokeMethod("onState", data);
-    //     return isInvalid;
+    // FlutterWebviewPlugin.channel.invokeMethod("onState", data);
+    // return isInvalid;
     // }
 
     Intent intent;
@@ -105,9 +106,10 @@ public class BrowserClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         // returning true causes the current WebView to abort loading the URL,
-        // while returning false causes the WebView to continue loading the URL as usual.
+        // while returning false causes the WebView to continue loading the URL as
+        // usual.
 
-        if( url.startsWith("http") || url.startsWith("https") || url.startsWith("ftp") ) {
+        if (url.startsWith("http") || url.startsWith("https") || url.startsWith("ftp")) {
             // 返回true会终止url请求，返回false继续加载
             boolean isInvalid = checkInvalidUrl(url);
             Map<String, Object> data = new HashMap<>();
@@ -118,45 +120,44 @@ public class BrowserClient extends WebViewClient {
 
             return isInvalid;
         }
-        try{
+        try {
             // URL Scheme 比如 taobao://... 自动跳转到淘宝app
-             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-             Log.d("-------------------------url",url);
-            if(isAvailable(intent)){
-                String _scheme=url.substring(0, url.indexOf("://"));
-                Log.d("-------------------------getScheme",_scheme);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            Log.d("-------------------------url", url);
+            if (isAvailable(intent)) {
+                String _scheme = url.substring(0, url.indexOf("://"));
+                Log.d("-------------------------getScheme", _scheme);
                 // 如果允许自动跳转第三方app
-                if(FlutterWebviewPlugin.allowSchemes!=null
-                &&FlutterWebviewPlugin.allowSchemes.size()>0
-                &&FlutterWebviewPlugin.allowSchemes.contains(_scheme)){
-                    activity.startActivity( intent );
-                }else{
+                if (FlutterWebviewPlugin.allowSchemes != null && FlutterWebviewPlugin.allowSchemes.size() > 0
+                        && FlutterWebviewPlugin.allowSchemes.contains(_scheme)) {
+                    activity.startActivity(intent);
+                } else {
                     AlertDialog.Builder ad1 = new AlertDialog.Builder(activity);
                     ad1.setTitle("提示");
-                    ad1.setMessage("确定跳转至第三方APP("+_scheme+")吗?");
+                    ad1.setMessage("确定跳转至第三方APP(" + _scheme + ")吗?");
                     DialogInterface.OnClickListener listener1 = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            activity.startActivity( intent );
+                            activity.startActivity(intent);
                         }
                     };
-                    ad1.setPositiveButton(" 确 定 ",listener1);
+                    ad1.setPositiveButton(" 确 定 ", listener1);
                     DialogInterface.OnClickListener listener2 = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface diyalog, int which) {
-                            Toast t = Toast.makeText(context,"取消跳转！", Toast.LENGTH_LONG);
+                            Toast t = Toast.makeText(context, "取消跳转！", Toast.LENGTH_LONG);
                             t.show();
                         }
                     };
-                    ad1.setNegativeButton(" 取 消 ",listener2);
+                    ad1.setNegativeButton(" 取 消 ", listener2);
                     ad1.show();
                 }
-            }else{
-                Toast t = Toast.makeText(context,"没有安装相应的第三方App！", Toast.LENGTH_LONG);
+            } else {
+                Toast t = Toast.makeText(context, "没有安装相应的第三方App！", Toast.LENGTH_LONG);
                 t.show();
             }
-        }catch(Exception e){
-            Log.d("-------------------------Exception",e.getMessage());
+        } catch (Exception e) {
+            Log.d("-------------------------Exception", e.getMessage());
         }
         return true;
         // // 注释代码
@@ -164,30 +165,28 @@ public class BrowserClient extends WebViewClient {
         // Map<String, Object> data = new HashMap<>();
         // data.put("url", url);
         // data.put("type", isInvalid ? "abortLoad" : "shouldStart");
-        
+
         // FlutterWebviewPlugin.channel.invokeMethod("onState", data);
         // return isInvalid;
     }
+
     // 新增代码
     public boolean isAvailable(Intent intent) {
         PackageManager packageManager = context.getPackageManager();
-        List list = packageManager.queryIntentActivities(intent,
-        PackageManager.MATCH_DEFAULT_ONLY);
+        List list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
-
-
-    
 
     // 注释代码
     // @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     // @Override
-    // public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
-    //     super.onReceivedHttpError(view, request, errorResponse);
-    //     Map<String, Object> data = new HashMap<>();
-    //     data.put("url", request.getUrl().toString());
-    //     data.put("code", Integer.toString(errorResponse.getStatusCode()));
-    //     FlutterWebviewPlugin.channel.invokeMethod("onHttpError", data);
+    // public void onReceivedHttpError(WebView view, WebResourceRequest request,
+    // WebResourceResponse errorResponse) {
+    // super.onReceivedHttpError(view, request, errorResponse);
+    // Map<String, Object> data = new HashMap<>();
+    // data.put("url", request.getUrl().toString());
+    // data.put("code", Integer.toString(errorResponse.getStatusCode()));
+    // FlutterWebviewPlugin.channel.invokeMethod("onHttpError", data);
     // }
 
     @Override

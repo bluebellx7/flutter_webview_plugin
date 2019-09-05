@@ -1,6 +1,5 @@
 package com.flutter_webview_plugin;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +39,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
 
     public static void registerWith(PluginRegistry.Registrar registrar) {
         channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
-        final FlutterWebviewPlugin instance = new FlutterWebviewPlugin(registrar.activity(),registrar.activeContext());
+        final FlutterWebviewPlugin instance = new FlutterWebviewPlugin(registrar.activity(), registrar.activeContext());
         registrar.addActivityResultListener(instance);
         channel.setMethodCallHandler(instance);
     }
@@ -50,129 +49,130 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         this.context = context;
     }
 
-
-
-    
     public void initX5(Context context) {
         // 在调用TBS初始化、创建WebView之前进行如下配置，以开启优化方案
-        HashMap <String,Object> map = new HashMap <String,Object> ();
+        HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
         QbSdk.initTbsSettings(map);
         QbSdk.setNeedInitX5FirstTime(true);
         QbSdk.setDownloadWithoutWifi(true);
         QbSdk.setTbsListener(new TbsListener() {
-            @Override public void onDownloadFinish(int i) {
+            @Override
+            public void onDownloadFinish(int i) {
                 Log.d("FileReader", "下载完成");
             }
-    
-            @Override public void onInstallFinish(int i) {
+
+            @Override
+            public void onInstallFinish(int i) {
                 Log.d("FileReader", "安装完成");
                 onX5LoadComplete();
             }
-    
-            @Override public void onDownloadProgress(int i) {
+
+            @Override
+            public void onDownloadProgress(int i) {
                 Log.d("FileReader", "下载进度:" + i);
             }
         });
-    
+
         QbSdk.initX5Environment(context, new QbSdk.PreInitCallback() {
-            @Override public void onCoreInitFinished() {
+            @Override
+            public void onCoreInitFinished() {
                 Log.d("FileReader", "内核初始化完成");
             }
-    
-            @Override public void onViewInitFinished(boolean b) {
+
+            @Override
+            public void onViewInitFinished(boolean b) {
                 Log.d("FileReader", "view初始化完成状态:" + b);
                 onX5LoadComplete();
             }
         });
     }
 
-
     private void onX5LoadComplete() {
         if (channel != null) {
-        channel.invokeMethod("onLoad", isLoadX5(context));
+            channel.invokeMethod("onLoad", isLoadX5(context));
         }
 
-        }
-        boolean isLoadX5(Context context) {
-        return QbSdk.canLoadX5(context);
     }
 
+    boolean isLoadX5(Context context) {
+        return QbSdk.canLoadX5(context);
+    }
 
     @Override
     public void onMethodCall(MethodCall call, MethodChannel.Result result) {
         switch (call.method) {
-            case "initX5":
-                initX5(context);
-            case "canUseTbsPlayer":
-                result.success(TbsVideo.canUseTbsPlayer(context));
-            case "openVideo":
-                String url = call.argument("url");
-                if(url==null){
-                    result.success(null);
-                }
-
-                String screenMode = call.argument("fullScreen");//?103:104;
-                Bundle bundle = new Bundle();
-                if(screenMode==null){
-                    screenMode="103";
-                }
-                bundle.putInt("screenMode", Integer.parseInt(screenMode));
-                TbsVideo.openVideo(context, url, bundle);
+        case "initX5":
+            initX5(context);
+        case "canUseTbsPlayer":
+            result.success(TbsVideo.canUseTbsPlayer(context));
+        case "openVideo":
+            String url = call.argument("url");
+            if (url == null) {
                 result.success(null);
-            case "launch":
-                openUrl(call, result);
-                break;
-            case "close":
-                close(call, result);
-                break;
-            case "eval":
-                eval(call, result);
-                break;
-            case "resize":
-                resize(call, result);
-                break;
-            case "reload":
-                reload(call, result);
-                break;
-            case "back":
-                back(call, result);
-                break;
-            case "forward":
-                forward(call, result);
-                break;
-            case "canGoBack":
-                canGoBack(call, result);
-                break;
-            case "canGoForward":
-                forward(call, result);
-                break;
-            case "hide":
-                hide(call, result);
-                break;
-            case "show":
-                show(call, result);
-                break;
-            case "reloadUrl":
-                reloadUrl(call, result);
-                break;
-            case "stopLoading":
-                stopLoading(call, result);
-                break;
-            case "cleanCookies":
-                cleanCookies(call, result);
-                break;
-            default:
-                result.notImplemented();
-                break;
+            }
+
+            String screenMode = call.argument("fullScreen");// ?103:104;
+            Bundle bundle = new Bundle();
+            if (screenMode == null) {
+                screenMode = "103";
+            }
+            bundle.putInt("screenMode", Integer.parseInt(screenMode));
+            TbsVideo.openVideo(context, url, bundle);
+            result.success(null);
+        case "launch":
+            openUrl(call, result);
+            break;
+        case "close":
+            close(call, result);
+            break;
+        case "eval":
+            eval(call, result);
+            break;
+        case "resize":
+            resize(call, result);
+            break;
+        case "reload":
+            reload(call, result);
+            break;
+        case "back":
+            back(call, result);
+            break;
+        case "forward":
+            forward(call, result);
+            break;
+        case "canGoBack":
+            canGoBack(call, result);
+            break;
+        case "canGoForward":
+            forward(call, result);
+            break;
+        case "hide":
+            hide(call, result);
+            break;
+        case "show":
+            show(call, result);
+            break;
+        case "reloadUrl":
+            reloadUrl(call, result);
+            break;
+        case "stopLoading":
+            stopLoading(call, result);
+            break;
+        case "cleanCookies":
+            cleanCookies(call, result);
+            break;
+        default:
+            result.notImplemented();
+            break;
         }
     }
 
     // 用于保存能够自动跳转到第三方app的Scheme
     public static List<String> allowSchemes = null;
+
     private void openUrl(MethodCall call, MethodChannel.Result result) {
         allowSchemes = call.argument("allowSchemes");
-
 
         boolean hidden = call.argument("hidden");
         String url = call.argument("url");
@@ -191,7 +191,6 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         String invalidUrlRegex = call.argument("invalidUrlRegex");
         boolean geolocationEnabled = call.argument("geolocationEnabled");
         boolean debuggingEnabled = call.argument("debuggingEnabled");
-        
 
         if (webViewManager == null || webViewManager.closed == true) {
             webViewManager = new WebviewManager(activity, context);
@@ -201,26 +200,9 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
 
         activity.addContentView(webViewManager.webView, params);
 
-
-
-        webViewManager.openUrl(withJavascript,
-                clearCache,
-                hidden,
-                clearCookies,
-                userAgent,
-                url,
-                headers,
-                withZoom,
-                withLocalStorage,
-                scrollBar,
-                supportMultipleWindows,
-                appCacheEnabled,
-                allowFileURLs,
-                useWideViewPort,
-                invalidUrlRegex,
-                geolocationEnabled,
-                debuggingEnabled
-        );
+        webViewManager.openUrl(withJavascript, clearCache, hidden, clearCookies, userAgent, url, headers, withZoom,
+                withLocalStorage, scrollBar, supportMultipleWindows, appCacheEnabled, allowFileURLs, useWideViewPort,
+                invalidUrlRegex, geolocationEnabled, debuggingEnabled);
         result.success(null);
     }
 
@@ -228,10 +210,10 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         Map<String, Number> rc = call.argument("rect");
         FrameLayout.LayoutParams params;
         if (rc != null) {
-            params = new FrameLayout.LayoutParams(
-                    dp2px(activity, rc.get("width").intValue()), dp2px(activity, rc.get("height").intValue()));
-            params.setMargins(dp2px(activity, rc.get("left").intValue()), dp2px(activity, rc.get("top").intValue()),
-                    0, 0);
+            params = new FrameLayout.LayoutParams(dp2px(activity, rc.get("width").intValue()),
+                    dp2px(activity, rc.get("height").intValue()));
+            params.setMargins(dp2px(activity, rc.get("left").intValue()), dp2px(activity, rc.get("top").intValue()), 0,
+                    0);
         } else {
             Display display = activity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -282,7 +264,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
      * Navigates back on the Webview.
      */
     private void canGoBack(MethodCall call, MethodChannel.Result result) {
-        if (webViewManager != null&&webViewManager.canGoBack()) {
+        if (webViewManager != null && webViewManager.canGoBack()) {
             result.success(true);
         }
         result.success(false);
@@ -292,7 +274,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
      * Navigates back on the Webview.
      */
     private void canGoForward(MethodCall call, MethodChannel.Result result) {
-        if (webViewManager != null&&webViewManager.canGoBack()) {
+        if (webViewManager != null && webViewManager.canGoBack()) {
             result.success(true);
         }
         result.success(false);

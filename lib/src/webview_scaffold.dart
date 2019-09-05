@@ -7,36 +7,35 @@ import 'package:flutter/rendering.dart';
 import 'base.dart';
 
 class WebviewScaffold extends StatefulWidget {
-
-  const WebviewScaffold({
-    Key key,
-    this.appBar,
-    @required this.url,
-    this.headers,
-    this.withJavascript,
-    this.clearCache,
-    this.clearCookies,
-    this.enableAppScheme,
-    this.userAgent,
-    this.primary = true,
-    this.persistentFooterButtons,
-    this.bottomNavigationBar,
-    this.withZoom,
-    this.withLocalStorage,
-    this.withLocalUrl,
-    this.scrollBar,
-    this.supportMultipleWindows,
-    this.appCacheEnabled,
-    this.hidden = false,
-    this.initialChild,
-    this.allowFileURLs,
-    this.resizeToAvoidBottomInset = false,
-    this.invalidUrlRegex,
-    this.geolocationEnabled,
-    this.debuggingEnabled = false,
-    this.allowSchemes
-  }) : super(key: key);
-
+  const WebviewScaffold(
+      {Key key,
+      this.appBar,
+      @required this.url,
+      this.headers,
+      this.withJavascript,
+      this.clearCache,
+      this.clearCookies,
+      this.enableAppScheme,
+      this.userAgent,
+      this.primary = true,
+      this.persistentFooterButtons,
+      this.bottomNavigationBar,
+      this.withZoom,
+      this.withLocalStorage,
+      this.withLocalUrl,
+      this.scrollBar,
+      this.supportMultipleWindows,
+      this.appCacheEnabled,
+      this.hidden = false,
+      this.initialChild,
+      this.allowFileURLs,
+      this.resizeToAvoidBottomInset = false,
+      this.invalidUrlRegex,
+      this.geolocationEnabled,
+      this.debuggingEnabled = false,
+      this.allowSchemes})
+      : super(key: key);
+  final List<String> allowSchemes;
   final PreferredSizeWidget appBar;
   final String url;
   final Map<String, String> headers;
@@ -61,7 +60,6 @@ class WebviewScaffold extends StatefulWidget {
   final String invalidUrlRegex;
   final bool geolocationEnabled;
   final bool debuggingEnabled;
-  final List<String> allowSchemes;
 
   @override
   _WebviewScaffoldState createState() => _WebviewScaffoldState();
@@ -159,7 +157,6 @@ class _WebviewScaffoldState extends State<WebviewScaffold> {
               invalidUrlRegex: widget.invalidUrlRegex,
               geolocationEnabled: widget.geolocationEnabled,
               debuggingEnabled: widget.debuggingEnabled,
-              allowSchemes:widget.allowSchemes
             );
           } else {
             if (_rect != value) {
@@ -172,7 +169,8 @@ class _WebviewScaffoldState extends State<WebviewScaffold> {
             }
           }
         },
-        child: widget.initialChild ?? const Center(child: const CircularProgressIndicator()),
+        child: widget.initialChild ??
+            const Center(child: const CircularProgressIndicator()),
       ),
     );
   }
@@ -195,7 +193,8 @@ class _WebviewPlaceholder extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, _WebviewPlaceholderRender renderObject) {
+  void updateRenderObject(
+      BuildContext context, _WebviewPlaceholderRender renderObject) {
     renderObject..onRectChanged = onRectChanged;
   }
 }

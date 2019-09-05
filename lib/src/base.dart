@@ -22,7 +22,7 @@ class FlutterWebviewPlugin {
 
   static FlutterWebviewPlugin _instance;
 
-  static const  _channel = const MethodChannel(_kChannel);
+  static const _channel = const MethodChannel(_kChannel);
 
   final _onBack = StreamController<Null>.broadcast();
   final _onDestroy = StreamController<Null>.broadcast();
@@ -61,7 +61,8 @@ class FlutterWebviewPlugin {
         );
         break;
       case 'onHttpError':
-        _onHttpError.add(WebViewHttpError(call.arguments['code'], call.arguments['url']));
+        _onHttpError.add(
+            WebViewHttpError(call.arguments['code'], call.arguments['url']));
         break;
     }
   }
@@ -91,11 +92,9 @@ class FlutterWebviewPlugin {
 
   Stream<WebViewHttpError> get onHttpError => _onHttpError.stream;
 
-
   static Future<Null> initX5() async {
     await _channel.invokeMethod("initX5");
   }
-
 
   Future<bool> canUseTbsPlayer() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -106,19 +105,18 @@ class FlutterWebviewPlugin {
     }
   }
 
-  Future<Null> openVideo(String url, {int fullScreen=103}) async {
+  Future<Null> openVideo(String url, {int fullScreen = 103}) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final Map<String, dynamic> args = <String, dynamic>{
         'fullScreen': fullScreen.toString(),
         'url': url
       };
-     await _channel.invokeMethod('openVideo', args);
+      await _channel.invokeMethod('openVideo', args);
     } else {
       return;
     }
   }
 
-  
   Future<bool> canGoBack() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canGoBack");
@@ -127,8 +125,8 @@ class FlutterWebviewPlugin {
       return true;
     }
   }
-  
- Future<bool> canGoForward() async {
+
+  Future<bool> canGoForward() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canGoForward");
       return res;
@@ -136,7 +134,6 @@ class FlutterWebviewPlugin {
       return true;
     }
   }
-
 
   /// Start the Webview with [url]
   /// - [headers] specify additional HTTP headers
@@ -159,30 +156,29 @@ class FlutterWebviewPlugin {
   /// - [invalidUrlRegex] is the regular expression of URLs that web view shouldn't load.
   /// For example, when webview is redirected to a specific URL, you want to intercept
   /// this process by stopping loading this URL and replacing webview by another screen.
-  Future<Null> launch(String url, {
-    Map<String, String> headers,
-    bool withJavascript,
-    bool clearCache,
-    bool clearCookies,
-    bool hidden,
-    bool enableAppScheme,
-    Rect rect,
-    String userAgent,
-    bool withZoom,
-    bool withLocalStorage,
-    bool withLocalUrl,
-    bool scrollBar,
-    bool supportMultipleWindows,
-    bool appCacheEnabled,
-    bool allowFileURLs,
-    bool useWideViewPort,
-    String invalidUrlRegex,
-    bool geolocationEnabled,
-    bool debuggingEnabled,
-    List<String> allowSchemes
-  }) async {
+  Future<Null> launch(String url,
+      {Map<String, String> headers,
+      bool withJavascript,
+      bool clearCache,
+      bool clearCookies,
+      bool hidden,
+      bool enableAppScheme,
+      Rect rect,
+      String userAgent,
+      bool withZoom,
+      bool withLocalStorage,
+      bool withLocalUrl,
+      bool scrollBar,
+      bool supportMultipleWindows,
+      bool appCacheEnabled,
+      bool allowFileURLs,
+      bool useWideViewPort,
+      String invalidUrlRegex,
+      bool geolocationEnabled,
+      bool debuggingEnabled,
+      List<String> allowSchemes}) async {
     final args = <String, dynamic>{
-      'allowSchemes':allowSchemes,
+      'allowSchemes': allowSchemes,
       'url': url,
       'withJavascript': withJavascript ?? true,
       'clearCache': clearCache ?? false,
@@ -250,10 +246,12 @@ class FlutterWebviewPlugin {
   }
 
   // Clean cookies on WebView
-  Future<Null> cleanCookies() async => await _channel.invokeMethod('cleanCookies');
+  Future<Null> cleanCookies() async =>
+      await _channel.invokeMethod('cleanCookies');
 
   // Stops current loading process
-  Future<Null> stopLoading() async => await _channel.invokeMethod('stopLoading');
+  Future<Null> stopLoading() async =>
+      await _channel.invokeMethod('stopLoading');
 
   /// Close all Streams
   void dispose() {
