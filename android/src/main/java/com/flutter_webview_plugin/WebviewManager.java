@@ -351,6 +351,34 @@ class WebviewManager {
         // Handle debugging
         webView.setWebContentsDebuggingEnabled(debuggingEnabled);
 
+        //------------------------------------------------------------------        
+        // 新增内容
+        activity.getWindow().setFormat(android.graphics.PixelFormat.TRANSLUCENT);
+
+        webView.getSettings().setPluginState(com.tencent.smtt.sdk.WebSettings.PluginState.ON_DEMAND);
+        webView.getSettings().setCacheMode(com.tencent.smtt.sdk.WebSettings.LOAD_NO_CACHE);
+
+       if(Build.VERSION.SDK_INT >= 21){
+        webView.getSettings().setMixedContentMode(0);
+           webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+       }else if(Build.VERSION.SDK_INT >= 19){
+           webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+       }else if(Build.VERSION.SDK_INT < 19){
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+               webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+           }
+       }
+
+       webView.getSettings().setTextZoom(100);
+       webView.getSettings().setDatabaseEnabled(true);
+       webView.getSettings().setAppCacheEnabled(true);
+       webView.getSettings().setLoadsImagesAutomatically(true);
+       webView.getSettings().setBlockNetworkImage(false);//是否阻塞加载网络图片  协议http or https
+       webView.getSettings().setUseWideViewPort(true);
+
+        //缓存文件最大值
+        webView.getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
+
         webViewClient.updateInvalidUrlRegex(invalidUrlRegex);
 
         if (geolocationEnabled) {
@@ -364,9 +392,10 @@ class WebviewManager {
             });
         }
 
-        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        // webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
-        // }
+        //适配5.0不允许http和https混合使用情况
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webView.getSettings().setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
 
         if (clearCache) {
             clearCache();
