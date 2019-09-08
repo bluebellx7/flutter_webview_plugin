@@ -96,7 +96,7 @@ class FlutterWebviewPlugin {
     await _channel.invokeMethod("initX5");
   }
 
-  Future<bool> canUseTbsPlayer() async {
+  static Future<bool> canUseTbsPlayer() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       bool res = await _channel.invokeMethod("canUseTbsPlayer");
       return res;
@@ -105,13 +105,26 @@ class FlutterWebviewPlugin {
     }
   }
 
-  Future<Null> openVideo(String url, {int fullScreen = 103}) async {
+  static Future<Null> openVideo(String url, {int fullScreen = 103}) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final Map<String, dynamic> args = <String, dynamic>{
         'fullScreen': fullScreen.toString(),
         'url': url
       };
       await _channel.invokeMethod('openVideo', args);
+    } else {
+      return;
+    }
+  }
+
+  static Future<Null> openWebActivity(String url, {String title='',String appBarColor='#333333'}) async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final Map<String, dynamic> args = <String, dynamic>{
+        'title': title,
+        'url': url,
+        'appBarColor': appBarColor,
+      };
+      await _channel.invokeMethod('openWebActivity', args);
     } else {
       return;
     }
