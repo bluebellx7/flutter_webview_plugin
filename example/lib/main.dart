@@ -220,12 +220,18 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RaisedButton(
+              child: const Text('Open Web'),
+              onPressed: () async {
+                FlutterWebviewPlugin.openWebActivity('http://feisuzhibo.com',title: "WebActivity");
+              },
+            ),
+            RaisedButton(
               child: const Text('Open Video'),
               onPressed: () async {
                 var canUseTbsPlayer =
-                    await flutterWebViewPlugin.canUseTbsPlayer();
+                    await FlutterWebviewPlugin.canUseTbsPlayer();
                 if (canUseTbsPlayer) {
-                  await flutterWebViewPlugin.openVideo(
+                  await FlutterWebviewPlugin.openVideo(
                       'http://iqiyi.qq-zuidazy.com/20181127/1613_0be59993/index.m3u8');
                 } else {
                   print('不支持播放视频');
