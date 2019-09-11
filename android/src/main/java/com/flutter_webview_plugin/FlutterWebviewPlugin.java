@@ -104,8 +104,10 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
         switch (call.method) {
         case "initX5":
             initX5(context);
+            break;
         case "canUseTbsPlayer":
             result.success(TbsVideo.canUseTbsPlayer(context));
+            break;
         case "openVideo":
             String url = call.argument("url");
             if (url == null) {
@@ -120,7 +122,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
             bundle.putInt("screenMode", Integer.parseInt(screenMode));
             TbsVideo.openVideo(context, url, bundle);
             result.success(null);
-        
+            break;
         case "openWebActivity":
             String _url = call.argument("url");
             String title = call.argument("title");
@@ -131,7 +133,7 @@ public class FlutterWebviewPlugin implements MethodCallHandler, PluginRegistry.A
             intent.putExtra("appBarColor", appBarColor);
             activity.startActivity(intent);
             result.success(null);
-            
+            break;
         case "launch":
             openUrl(call, result);
             break;
