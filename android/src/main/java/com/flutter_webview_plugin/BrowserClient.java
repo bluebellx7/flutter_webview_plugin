@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import java.util.List;
 import android.util.Log;
+import android.content.res.Resources;
 
 /**
  * Created by lejard_h on 20/12/2017.
@@ -60,6 +61,24 @@ public class BrowserClient extends WebViewClient {
             invalidUrlPattern = null;
         }
     }
+
+    
+   @Override
+   public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+//        Log.i("--------->","地址："+url);
+       url = url.toLowerCase();
+
+       Resources res = context.getResources();
+       String[] filterUrls = res.getStringArray(R.array.adUrls);
+       for (String adUrl : filterUrls ) {
+           if (url.contains(adUrl)) {
+            // Log.i("--------->","广告："+url);
+            return new WebResourceResponse(null,null,null);
+           }
+       }
+       return super.shouldInterceptRequest(view, url);
+   }
+
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {

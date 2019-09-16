@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="adUrls">
+        <item>cgrtlationsforyou.com</item>
+        <item>pos.baidu.com</item>
+    </string-array>
+</resources>
